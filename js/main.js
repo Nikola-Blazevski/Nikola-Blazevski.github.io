@@ -1,31 +1,48 @@
 document.getElementById("year").textContent = new Date().getFullYear();
 
 /* ---------- Resumes: flag any PDF that hasn't been uploaded yet ---------- */
-document.querySelectorAll(".resume[data-file]").forEach(async (card) => {
+document.querySelectorAll(".doc[data-file]").forEach(async (doc) => {
   try {
-    const res = await fetch(card.dataset.file, { method: "HEAD" });
+    const res = await fetch(doc.dataset.file, { method: "HEAD" });
     if (res.ok) return;
   } catch { /* offline or blocked: treat as missing */ }
-  card.classList.add("is-missing");
-  card.querySelector(".resume__missing").hidden = false;
-  card.querySelectorAll(".btn").forEach((btn) => {
-    btn.removeAttribute("href");
-    btn.setAttribute("aria-disabled", "true");
-  });
+  doc.classList.add("is-missing");
+  doc.querySelector(".doc__links").textContent = "Not uploaded yet";
 });
 
-/* ---------- Recon terminal: reveal lines one by one ---------- */
-const term = document.querySelector(".term");
-if (term && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  const lines = [...term.querySelectorAll(".term__line")];
-  term.classList.add("is-typing");
-  const io = new IntersectionObserver(([entry]) => {
-    if (!entry.isIntersecting) return;
-    io.disconnect();
-    lines.forEach((line, i) => setTimeout(() => line.classList.add("is-shown"), 350 + i * 280));
-  }, { threshold: 0.4 });
-  io.observe(term);
+/* ---------- Local time in Edmonton ---------- */
+const clock = document.getElementById("clock");
+const fmt = new Intl.DateTimeFormat("en-US", { timeZone: "America/Edmonton", hour: "numeric", minute: "2-digit" });
+function updateClock() { clock.textContent = fmt.format(Date.now()); }
+if (clock) {
+  updateClock();
+  setInterval(updateClock, 30e3);
 }
+
+/* ---------- Reveal sections as they scroll in ---------- */
+const revealables = [...document.querySelectorAll("[data-reveal], .opener")];
+const groups = new Map();
+revealables.forEach((el) => {
+  const group = el.closest("section, footer") ?? document.body;
+  const i = groups.get(group) ?? 0;
+  el.style.setProperty("--i", Math.min(i, 6));
+  groups.set(group, i + 1);
+});
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add("is-in");
+    io.unobserve(entry.target);
+  });
+}, { rootMargin: "0px 0px -10% 0px" });
+revealables.forEach((el) => io.observe(el));
+
+/* ---------- Footer wordmark: fit the viewBox to the set name so it spans margin to margin ---------- */
+const wordmark = document.querySelector(".wordmark");
+document.fonts.ready.then(() => {
+  const box = wordmark.querySelector("text").getBBox();
+  wordmark.setAttribute("viewBox", `${box.x} ${box.y} ${box.width} ${box.height}`);
+});
 
 /* ---------- For the curious ---------- */
 console.log(
