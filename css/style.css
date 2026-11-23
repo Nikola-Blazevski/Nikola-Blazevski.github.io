@@ -41,6 +41,7 @@
   --fade-hero: linear-gradient(to bottom, #000 60%, rgb(0 0 0 / 1) 60%, rgb(0 0 0 / 0.972) 64%, rgb(0 0 0 / 0.896) 68%, rgb(0 0 0 / 0.784) 72%, rgb(0 0 0 / 0.648) 76%, rgb(0 0 0 / 0.5) 80%, rgb(0 0 0 / 0.352) 84%, rgb(0 0 0 / 0.216) 88%, rgb(0 0 0 / 0.104) 92%, rgb(0 0 0 / 0.028) 96%, rgb(0 0 0 / 0) 100%);
   --fade-opener: linear-gradient(to bottom, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.028) 3.8%, rgb(0 0 0 / 0.104) 7.6%, rgb(0 0 0 / 0.216) 11.4%, rgb(0 0 0 / 0.352) 15.2%, rgb(0 0 0 / 0.5) 19%, rgb(0 0 0 / 0.648) 22.8%, rgb(0 0 0 / 0.784) 26.6%, rgb(0 0 0 / 0.896) 30.4%, rgb(0 0 0 / 0.972) 34.2%, rgb(0 0 0 / 1) 38%, #000 58%, rgb(0 0 0 / 1) 58%, rgb(0 0 0 / 0.972) 62.2%, rgb(0 0 0 / 0.896) 66.4%, rgb(0 0 0 / 0.784) 70.6%, rgb(0 0 0 / 0.648) 74.8%, rgb(0 0 0 / 0.5) 79%, rgb(0 0 0 / 0.352) 83.2%, rgb(0 0 0 / 0.216) 87.4%, rgb(0 0 0 / 0.104) 91.6%, rgb(0 0 0 / 0.028) 95.8%, rgb(0 0 0 / 0) 100%);
   --fade-contact: linear-gradient(to bottom, rgb(0 0 0 / 0) 5%, rgb(0 0 0 / 0.028) 10%, rgb(0 0 0 / 0.104) 15%, rgb(0 0 0 / 0.216) 20%, rgb(0 0 0 / 0.352) 25%, rgb(0 0 0 / 0.5) 30%, rgb(0 0 0 / 0.648) 35%, rgb(0 0 0 / 0.784) 40%, rgb(0 0 0 / 0.896) 45%, rgb(0 0 0 / 0.972) 50%, rgb(0 0 0 / 1) 55%);
+  --fade-both: linear-gradient(to bottom, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.028) 1.4%, rgb(0 0 0 / 0.104) 2.8%, rgb(0 0 0 / 0.216) 4.2%, rgb(0 0 0 / 0.352) 5.6%, rgb(0 0 0 / 0.5) 7%, rgb(0 0 0 / 0.648) 8.4%, rgb(0 0 0 / 0.784) 9.8%, rgb(0 0 0 / 0.896) 11.2%, rgb(0 0 0 / 0.972) 12.6%, rgb(0 0 0 / 1) 14%, #000 55%, rgb(0 0 0 / 1) 55%, rgb(0 0 0 / 0.972) 59.5%, rgb(0 0 0 / 0.896) 64%, rgb(0 0 0 / 0.784) 68.5%, rgb(0 0 0 / 0.648) 73%, rgb(0 0 0 / 0.5) 77.5%, rgb(0 0 0 / 0.352) 82%, rgb(0 0 0 / 0.216) 86.5%, rgb(0 0 0 / 0.104) 91%, rgb(0 0 0 / 0.028) 95.5%, rgb(0 0 0 / 0) 100%);
   --fade-bottom: linear-gradient(to bottom, #000 55%, rgb(0 0 0 / 1) 55%, rgb(0 0 0 / 0.972) 59.5%, rgb(0 0 0 / 0.896) 64%, rgb(0 0 0 / 0.784) 68.5%, rgb(0 0 0 / 0.648) 73%, rgb(0 0 0 / 0.5) 77.5%, rgb(0 0 0 / 0.352) 82%, rgb(0 0 0 / 0.216) 86.5%, rgb(0 0 0 / 0.104) 91%, rgb(0 0 0 / 0.028) 95.5%, rgb(0 0 0 / 0) 100%);
   color-scheme: light;
 }
@@ -286,7 +287,7 @@ h2 {
 .lab-server__role { margin-top: 6px; font-size: var(--step-small); color: var(--muted); }
 .lab-server__specs { padding-bottom: 20px; border-bottom: 1px solid var(--rule); font-size: var(--step-small); color: var(--muted); }
 .lab-stack { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.lab-stack li { display: grid; grid-template-columns: 8.25em minmax(0, 1fr); gap: 14px; align-items: center; font-size: var(--step-small); }
+.lab-stack li { display: grid; grid-template-columns: 136px minmax(0, 1fr); gap: 14px; align-items: center; font-size: var(--step-small); }
 
 /* solid gold tags, square like the site's buttons, label set to the left */
 .tag {
@@ -425,13 +426,13 @@ h2 {
 
 /* ---------- Tablet / phone ---------- */
 @media (max-width: 900px) {
-  .top__nav a:not([href="#contact"]):not(.top__icon) { display: none; }
+  .top__nav a:not([href$="#contact"]):not(.top__icon) { display: none; }
   .top__nav { gap: 24px; }
   .hero__actions { gap: 8px; flex-wrap: nowrap; }
   .hero__actions .btn { padding: 0 14px; }
   .hero__foot { flex-direction: column; align-items: start; }
   .about { display: flex; flex-direction: column; align-items: stretch; gap: 32px; }
-  .about__me { aspect-ratio: 4 / 5; margin-inline: calc(-1 * var(--margin)); -webkit-mask-image: var(--fade-bottom); mask-image: var(--fade-bottom); }
+  .about__me { aspect-ratio: 4 / 5; margin-inline: calc(-1 * var(--margin)); -webkit-mask-image: var(--fade-both); mask-image: var(--fade-both); }
   .about__me img { object-position: 50% 35%; }
   .project { grid-template-columns: minmax(0, 1fr) auto; }
   .project__desc { grid-column: 1 / -1; grid-row: 2; }
@@ -439,6 +440,12 @@ h2 {
   .resume__body { grid-template-columns: 1fr; }
   .work__head { justify-content: flex-start; }
   .contact { min-height: 80svh; }
+  .doc { flex-direction: column; align-items: flex-start; gap: 8px; }
+  /* taller tap areas on touch screens; the negative margins keep the layout where it was */
+  .top__mark, .top__nav a:not(.top__icon), .work__all, .lab-story, .lab-more summary, .doc__links a, .story__back, .contact__social a {
+    display: inline-flex; align-items: center; min-height: 44px; margin-block: -10px;
+  }
+  .top__icon { padding: 12px; margin: -12px -4px; }
   .contact__email { white-space: normal; font-size: 11.5vw; margin-bottom: 8vh; }
   .contact__corners { flex-direction: column; align-items: start; }
 }
