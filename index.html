@@ -40,6 +40,7 @@
     <nav class="top__nav" aria-label="Sections">
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
+      <a href="#homelab">Home lab</a>
       <a href="#resume">Resume</a>
       <a href="#contact">Contact</a>
       <a class="top__icon" href="https://github.com/Nikola-Blazevski" target="_blank" rel="noopener" aria-label="GitHub"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
@@ -126,6 +127,120 @@
             </a>
           </li>
       </ul>
+    </section>
+
+    <section class="lab" id="homelab">
+      <div class="lab__head">
+        <div class="lab__intro">
+          <h2 data-reveal>Home lab</h2>
+          <p class="lead" data-reveal>Three machines at home run my media, photos, passwords and a local AI stack.</p>
+          <p data-reveal>Two TrueNAS boxes, pinawa and pancake, handle storage and self-hosted apps. gimli runs local language models on a pair of Radeon GPUs.</p>
+        </div>
+        <div class="lab__photos" data-reveal>
+          <figure><img src="assets/photos/homelab-setup-1024.webp" srcset="assets/photos/homelab-setup-640.webp 640w, assets/photos/homelab-setup-1024.webp 1024w, assets/photos/homelab-setup-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 30vw" alt="The home lab on a wire shelf: a rackmount server and a managed PoE switch on top, a tower PC and cabling below" width="1600" height="2133" decoding="async" loading="lazy"></figure>
+          <figure><img src="assets/photos/homelab-pinawa-1024.webp" srcset="assets/photos/homelab-pinawa-640.webp 640w, assets/photos/homelab-pinawa-1024.webp 1024w, assets/photos/homelab-pinawa-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 30vw" alt="Inside pinawa: two tower CPU coolers, a graphics card and two cages of 4 TB IronWolf drives" width="1600" height="2133" decoding="async" loading="lazy"></figure>
+        </div>
+      </div>
+
+      <div class="lab-map" data-reveal>
+        <h3 class="lab__sub">Servers</h3>
+        <div class="lab-servers">
+          <article class="lab-server">
+            <header>
+              <h3>pinawa</h3>
+              <p class="lab-server__role">TrueNAS</p>
+            </header>
+            <p class="lab-server__specs">2× Xeon E5-2680 v4 · 64 GB ECC · RTX 2060<br>SAS HBA · 3× 4 TB pool · TrueNAS SCALE</p>
+            <a class="lab-story" href="pinawa.html">How I got the motherboard to boot <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4 3h9v9h-2V6.4l-7.3 7.3-1.4-1.4L9.6 5H4z"/></svg></a>
+            <ul class="lab-stack">
+              <li><span class="tag">Media</span><span>Jellyfin · Immich</span></li>
+              <li><span class="tag">Storage</span><span>SMB share</span></li>
+              <li><span class="tag">Downloads</span><span>qBittorrent · Radarr · Sonarr · Prowlarr</span></li>
+              <li><span class="tag">Networking</span><span>Nginx Proxy Manager · AdGuard · Cloudflare Tunnel</span></li>
+              <li><span class="tag">Dashboard</span><span>Homepage</span></li>
+              <li><span class="tag">Games</span><span>Minecraft</span></li>
+            </ul>
+            <details class="lab-more">
+              <summary>Service details</summary>
+              <dl>
+                <div><dt>Jellyfin</dt><dd>Streams movies and TV</dd></div>
+                <div><dt>Immich</dt><dd>Photo and video backup</dd></div>
+                <div><dt>SMB share</dt><dd>Network share for movies, shows, music and downloads</dd></div>
+                <div><dt>qBittorrent</dt><dd>Torrent client, routed through a Mullvad WireGuard VPN</dd></div>
+                <div><dt>Radarr, Sonarr, Prowlarr</dt><dd>Find and fetch movies and TV, behind the same VPN</dd></div>
+                <div><dt>Nginx Proxy Manager</dt><dd>HTTPS for every app on the LAN</dd></div>
+                <div><dt>AdGuard Home</dt><dd>DNS and ad blocking for the LAN</dd></div>
+                <div><dt>cloudflared</dt><dd>Cloudflare Tunnel</dd></div>
+                <div><dt>Homepage</dt><dd>Start page linking every app on pinawa and pancake</dd></div>
+                <div><dt>Minecraft</dt><dd>Modded Fabric server</dd></div>
+              </dl>
+            </details>
+          </article>
+
+          <article class="lab-server">
+            <header>
+              <h3>pancake</h3>
+              <p class="lab-server__role">TrueNAS</p>
+            </header>
+            <p class="lab-server__specs">i5-8500T · 16 GB<br>Single 1 TB disk · TrueNAS SCALE</p>
+            <ul class="lab-stack">
+              <li><span class="tag">Password manager</span><span>Vaultwarden</span></li>
+              <li><span class="tag">Media</span><span>Navidrome</span></li>
+              <li><span class="tag">Networking</span><span>Cloudflare Tunnel</span></li>
+            </ul>
+            <details class="lab-more">
+              <summary>Service details</summary>
+              <dl>
+                <div><dt>Vaultwarden</dt><dd>Password manager</dd></div>
+                <div><dt>Navidrome</dt><dd>Music streaming</dd></div>
+                <div><dt>cloudflared</dt><dd>Cloudflare Tunnel</dd></div>
+              </dl>
+            </details>
+          </article>
+
+          <article class="lab-server">
+            <header>
+              <h3>gimli</h3>
+              <p class="lab-server__role">Local AI</p>
+            </header>
+            <p class="lab-server__specs">Ryzen 7 1700X · 12 GB RAM<br>2× Radeon RX 6800 · 240 GB SSD · Debian 13</p>
+            <ul class="lab-stack">
+              <li><span class="tag">AI</span><span>Ollama · Open WebUI</span></li>
+              <li><span class="tag">AI tools</span><span>SearXNG · Tika · TTS · tool servers</span></li>
+              <li><span class="tag">Automation</span><span>Browser agent</span></li>
+              <li><span class="tag">Maintenance</span><span>Watchtower</span></li>
+            </ul>
+            <details class="lab-more">
+              <summary>Service details</summary>
+              <dl>
+                <div><dt>Ollama</dt><dd>Runs the local models: qwen3-vl 32B, qwen3 27B and 8B, a coding model, bge-m3</dd></div>
+                <div><dt>Open WebUI</dt><dd>Chat interface with logins and MCP tools; backed up nightly</dd></div>
+                <div><dt>SearXNG</dt><dd>Private web search for the models</dd></div>
+                <div><dt>Apache Tika</dt><dd>Pulls text out of uploaded documents</dd></div>
+                <div><dt>openedai-speech</dt><dd>Text-to-speech</dd></div>
+                <div><dt>Tool servers</dt><dd>Memory, time, weather and git tools</dd></div>
+                <div><dt>open-terminal</dt><dd>Gives the models a terminal</dd></div>
+                <div><dt>Browser agent</dt><dd>Chromium the models can drive, watchable over noVNC</dd></div>
+                <div><dt>Watchtower</dt><dd>Keeps the containers up to date</dd></div>
+              </dl>
+            </details>
+          </article>
+        </div>
+      </div>
+
+      <details class="lab-security">
+        <summary class="lab__sub" data-reveal>How it's secured</summary>
+        <ul class="lab-measures">
+          <li data-reveal><h4>Zero-trust access</h4><p>Anything reachable from outside sits behind Cloudflare Zero Trust. Every request is authenticated at the edge before it ever reaches the home network, and only approved identities get in, with a one-time code.</p></li>
+          <li data-reveal><h4>No inbound ports</h4><p>Nothing is port-forwarded. Services reach the internet through outbound-only Cloudflare Tunnels, so the home network accepts no inbound connections.</p></li>
+          <li data-reveal><h4>Mutual TLS</h4><p>Mobile clients require a client certificate on each device. Requests without a valid certificate are dropped at the edge, and any device can be revoked on its own.</p></li>
+          <li data-reveal><h4>Defence in depth</h4><p>Passing the edge only gets you to each app's own login. No single control stands between the internet and the data.</p></li>
+          <li data-reveal><h4>Geo-fencing</h4><p>A web application firewall rule blocks traffic from outside my country.</p></li>
+          <li data-reveal><h4>Least exposure</h4><p>Services stay on the home network by default. Nothing is reachable from outside unless it has a reason to be.</p></li>
+          <li data-reveal><h4>Encryption in transit</h4><p>TLS everywhere, including on the LAN, with a wildcard certificate issued through a DNS challenge so nothing has to be exposed to get it.</p></li>
+          <li data-reveal><h4>Patch management</h4><p>Apps and containers update automatically, and the AI server installs OS security patches on its own.</p></li>
+        </ul>
+      </details>
     </section>
 
     <section class="resume" id="resume">

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Getting pinawa to boot · Nikola Blazevski</title>
+  <meta name="description" content="Getting an undocumented dual-socket X99 board from China to boot in pinawa, my TrueNAS server, and whether I would recommend one.">
+  <link rel="canonical" href="https://nblazevski.ca/pinawa.html">
+  <meta name="theme-color" content="#131a24">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/onest.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="top page-top">
+    <a class="top__mark" href="index.html" aria-label="Nikola Blazevski, home">NB</a>
+    <nav class="top__nav" aria-label="Sections">
+      <a href="index.html#homelab">Home lab</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article class="story">
+      <a class="story__back" href="index.html#homelab">← Back to the home lab</a>
+      <h1>Getting pinawa to boot</h1>
+      <p class="lead">pinawa runs on a cheap dual-socket X99 board from China that has no documentation at all. Here's what it took to get it booting, and whether I'd recommend one.</p>
+
+      <h2>The build</h2>
+      <ul>
+        <li>Unbranded dual-socket X99 motherboard (E-ATX) with a custom BIOS</li>
+        <li>2× Intel Xeon E5-2680 v4</li>
+        <li>64 GB registered ECC DDR4 at 2133 MHz</li>
+        <li>EVGA GeForce RTX 2060</li>
+        <li>SAS HBA card and 3× 4 TB drives in one pool</li>
+        <li>Two daisy-chained ATX power supplies</li>
+        <li>3U server rack case, sitting partially open</li>
+        <li>TrueNAS SCALE</li>
+      </ul>
+      <p>I don't know the exact model of the board. If you search eBay for "x99 xeon motherboard dual cpu" you'll find it, or one just like it. I bought the CPUs as a combo without memory, sold my old unbuffered DDR4 at a profit, and bought 64 GB of registered ECC instead.</p>
+
+      <figure>
+        <img src="assets/photos/homelab-pinawa-1024.webp" srcset="assets/photos/homelab-pinawa-640.webp 640w, assets/photos/homelab-pinawa-1024.webp 1024w, assets/photos/homelab-pinawa-1600.webp 1600w" sizes="(max-width: 900px) 100vw, 72ch" alt="Inside pinawa: two tower CPU coolers, an RTX 2060, two cages of 4 TB IronWolf drives and a red two-digit debug display on the board" width="1600" height="2133" decoding="async" loading="lazy">
+        <figcaption>pinawa with both coolers, the RTX 2060 and the drive cages. The red two-digit display on the board shows the BIOS debug code.</figcaption>
+      </figure>
+
+      <h2>Debugging with no documentation</h2>
+      <p>Don't bother looking for documentation on these boards. There is none. I searched QQ, Baidu and Chinese video sites and found nothing.</p>
+      <p>What finally got me through was Miyconst's <a href="https://miyconst.github.io/hardware/cpu/intel/motherboard/2023/11/18/chinese-x99-post-codes.html" target="_blank" rel="noopener">post on Chinese X99 POST codes</a>. It covers a different custom X99 board from China, but it lists the debug info and boot codes for that board's BIOS, and I cross-referenced those against the codes on my board's display until I worked out why it wouldn't boot.</p>
+      <p>Huge shoutout to Miyconst. I leaned on that post and his <a href="https://www.youtube.com/Miyconst" target="_blank" rel="noopener">YouTube channel</a> very heavily while debugging the boot codes I was getting, and I wouldn't have got this board running without them.</p>
+
+      <h2>Memory is the hard part</h2>
+      <ul>
+        <li>Use ECC memory if you want the system to be decent, and get registered DIMMs rather than unregistered ones.</li>
+        <li>The memory must run at exactly the speed the CPUs and board specify. For me that was 2133 MHz.</li>
+        <li>The board won't boot without identical registered DIMMs spread evenly between the two CPUs. You could try non-ECC unbuffered DIMMs, but you risk only one CPU being usable.</li>
+        <li>Most of these dual-CPU boards only support dual-channel memory instead of quad-channel, so memory access isn't fast and speeds can drop hard under load. That's another reason to go registered.</li>
+      </ul>
+      <p>With ECC set up properly, you won't see memory issues on a server.</p>
+
+      <h2>Power, cooling and case</h2>
+      <ul>
+        <li><strong>Power.</strong> Dual-CPU boards need two 8-pin CPU power cables. I run two daisy-chained ATX power supplies. A server PSU with a breakout board would also work, but I couldn't find any that run on 110 V, so they're risky for a home build.</li>
+        <li><strong>Coolers.</strong> Make absolutely certain which generation of the socket you have. Different generations of the same socket use different cooler mounting hardware.</li>
+        <li><strong>Case.</strong> The board is E-ATX, so finding a case that fits is really hard. Mine used to sit on an old mining chassis I had lying around, until I bought a server rack case. That case is 3U instead of 4U, so it still has to sit partially open.</li>
+      </ul>
+
+      <h2>What you get, and what you lose</h2>
+      <p>It's a strange mix of enterprise and consumer hardware: a custom BIOS on a jury-rigged X99 chipset. You get some nice enterprise features. My SAS HBA card interfaces with the BIOS, which makes me think the BIOS uses some Supermicro code.</p>
+      <p>You also lose some server features: no boot on LAN, no wake on LAN and no automatic power-on after a power loss. That doesn't matter much if the machine is right next to you. To manage it remotely, you could buy or build a PiKVM.</p>
+
+      <h2>Should you build one?</h2>
+      <p>Not for AI. Modern GPUs need a good CPU and fast system memory, and running several GPUs needs fast PCIe lanes. On these boards the CPU clock speeds are slow, memory is dual-channel, and most route the PCIe lanes off only one CPU, so you never use the lanes on both chips. For AI it's very uneconomical.</p>
+      <p>Where it shines is work that needs lots of cores and threads but not much compute per core, like a home server. Buy a combo with both CPUs and as much memory as you want, and you can't beat it for a strong, horizontally scaled home server. Power consumption is fairly high, but in my opinion it's worth it.</p>
+    </article>
+  </main>
+
+  <footer class="foot">
+    <div class="foot__row">
+      <p>Photographs by Nikola Blazevski and Aieshini Udumullage.</p>
+      <p>No cookies, no analytics.</p>
+    </div>
+    <svg class="wordmark" viewBox="0 0 1600 150" aria-hidden="true"><text x="0" y="132">NIKOLA BLAZEVSKI</text></svg>
+    <p class="foot__legal">© <span id="year">2026</span> Nikola Blazevski</p>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

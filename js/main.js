@@ -10,6 +10,37 @@ document.querySelectorAll(".doc[data-file]").forEach(async (doc) => {
   doc.querySelector(".doc__links").textContent = "Not uploaded yet";
 });
 
+/* ---------- Home lab photos: show empty slots locally, hide them on the live site ---------- */
+const isLocal = ["localhost", "127.0.0.1", ""].includes(location.hostname);
+document.querySelectorAll(".lab-shot, .story figure").forEach(async (shot) => {
+  const src = shot.querySelector("img").getAttribute("src");
+  try {
+    const res = await fetch(src, { method: "HEAD" });
+    if (res.ok) return;
+  } catch { /* offline or blocked: treat as missing */ }
+  if (isLocal) {
+    shot.dataset.file = `Add ${src}`;
+    shot.classList.add("is-empty");
+  } else {
+    shot.hidden = true;
+  }
+});
+
+/* ---------- Home lab service details: one panel at a time; click away or Escape closes it ---------- */
+const panels = [...document.querySelectorAll(".lab-more")];
+panels.forEach((p) => p.addEventListener("toggle", () => {
+  if (p.open) panels.forEach((other) => { if (other !== p) other.open = false; });
+}));
+const floating = matchMedia("(min-width: 901px)");
+document.addEventListener("click", (e) => {
+  if (!floating.matches) return;
+  panels.forEach((p) => { if (p.open && !p.contains(e.target)) p.open = false; });
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  panels.forEach((p) => { if (p.open) { p.open = false; p.querySelector("summary").focus(); } });
+});
+
 /* ---------- Local time in Edmonton ---------- */
 const clock = document.getElementById("clock");
 const fmt = new Intl.DateTimeFormat("en-US", { timeZone: "America/Edmonton", hour: "numeric", minute: "2-digit" });
